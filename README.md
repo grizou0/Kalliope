@@ -189,15 +189,14 @@ NeureoTransmetteur (branchement suivant la réponse)
   - name: "synapse1"
     signals:
       - order: "pose moi une question"
-      - order: "pose-moi une question"
     neurons:
       - say:
           message: "aimez vous les frites?"
       - neurotransmitter:
-          from_answer_link:
+          from_answer_link:      #branchement suivant la réponse
             - synapse: "synapse2"
               answers:
-                - "absolument"
+                - "absolument"  #si "absolument, on branche vers synapse2
                 - "peut-être"
                 - "oui"
             - synapse: "synapse3"
@@ -260,3 +259,20 @@ Ce fichier permet à un soft externe d'exécuter des commande suivant l'ordre en
       - say:
            message: "soft exécuté"
 ......
+-------------------------------------
+#Utilisation memorisation et réutilisation
+- name: "synapse-name"
+  signals:
+    - order: "my order"
+  neurons:
+    - shell:
+        cmd: "echo 10 > commande.txt" #ecriture d'un ordre
+        kalliope_memory:
+           key_name_in_memory: "{{ var }}"
+ -name: "synapse-re"
+   signals:
+    - order:"encore"
+  neurons:
+    - neuron_name:
+        parameter1: "{{ kalliope_memory['key_name_in_memory'] }}"
+        
